@@ -1,77 +1,40 @@
-from collections import deque,defaultdict
-import numpy as np
+with open("day03/input.txt",'r') as input:
+    lines=input.read().splitlines()
 
-input=open("day03/input.txt",'r')
-lines=input.read().splitlines()
-input.close()
+def intFromList(x):
+    return int(''.join(x),2)
 
-ns=[int(line,2) for line in lines]
-
-nrow=len(lines)
-ncol=len(lines[1])
-vec=np.zeros(ncol)
-
-for line in lines:
-    vec+=np.array([int(ch) for ch in line])
-
-gamma = np.greater(np.divide(vec,nrow*1.0),0.5)
-epsilon = np.invert(gamma)
-
-gamma=int(''.join(['1' if x else '0' for x in list(gamma)]),2)
-epsilon=int(''.join(['1' if x else '0' for x in list(epsilon)]),2)
-
+digits=list(map(lambda x: ''.join(x),zip(*lines)))
+gamma = intFromList(map(lambda d: '1' if d.count('1')>=len(d)/2 else '0',digits))
+epsilon = intFromList(map(lambda d: '0' if d.count('1')>=len(d)/2 else '1',digits))
 answer1=gamma*epsilon
 
-def vecToBin(vec):
-    return ''.join(['1' if x else '0' for x in vec])
-def vecToInt(vec):
-    return int(''.join(['1' if x else '0' for x in vec]),2)
+def getO2(lines,digit=0):
+    if len(lines)==1: 
+        return int(lines[0],2)
+    
+    ones  = [line for line in lines if line[digit]=='1']
+    zeros = [line for line in lines if line[digit]=='0']
 
-vecs=[]
-for line in lines:
-    vecs.append(np.array([ch=='1' for ch in line]))
-
-
-def findO2(vecs,digit):
-    if len(vecs)==1: 
-        return vecToInt(vecs[0])
-    cnt=0
-    nrow=len(vecs)
-    vones=[]
-    vzeros=[]
-    for v in vecs:
-        if v[digit]: 
-            cnt+=1
-            vones.append(v)
-        else:
-            vzeros.append(v)
-    if cnt>=nrow/2:
-        return findO2(vones,digit+1)
+    if len(ones)>=len(zeros):
+        return getO2(ones,digit+1)
     else:
-        return findO2(vzeros,digit+1)
+        return getO2(zeros,digit+1)
 
+def getCO2(lines,digit=0):
+    if len(lines)==1: 
+        return int(lines[0],2)
+    
+    ones  = [line for line in lines if line[digit]=='1']
+    zeros = [line for line in lines if line[digit]=='0']
 
-def findCO2(vecs,digit):
-    if len(vecs)==1: 
-        return vecToInt(vecs[0])
-    cnt=0
-    nrow=len(vecs)
-    vones=[]
-    vzeros=[]
-    for v in vecs:
-        if v[digit]: 
-            cnt+=1
-            vones.append(v)
-        else:
-            vzeros.append(v)
-    if cnt>=nrow/2:
-        return findCO2(vzeros,digit+1)
+    if len(ones)>=len(zeros):
+        return getCO2(zeros,digit+1)
     else:
-        return findCO2(vones,digit+1)
+        return getCO2(ones,digit+1)
 
-o2=findO2(vecs,0)
-co2=findCO2(vecs,0)
-
+o2 =getO2 (lines)
+co2=getCO2(lines)
 answer2=o2*co2
 
 print(answer1,answer2)

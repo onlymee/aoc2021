@@ -1,15 +1,16 @@
 from collections import defaultdict
-answer1=-1
-answer2=-1
-
 with open("day08/input.txt",'r') as input:
     lines=input.read().splitlines()
 
+# Reference data
 segs=['abcefg','cf','acdeg','acdfg','bcdf','abdfg','abdefg','acf','abcdefg','abcdfg']
+
 counts={ch:''.join(segs).count(ch) for ch in 'abcdefg'}
-lookup={s:str(i) for i,s in enumerate(segs)}
 sizes=[len(s) for s in segs]
-print(sorted(sizes))
+
+# Find digit for a given segment pattern
+lookup={s:str(i) for i,s in enumerate(segs)}
+
 answer1=0
 displays=[]
 for line in lines:

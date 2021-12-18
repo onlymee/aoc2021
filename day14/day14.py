@@ -14,7 +14,6 @@ for line in lines[2:]:
     ins[fr]=to
     inpairs[fr]=[fr[0]+to,to+fr[1]]
 
-
 pol=start
 print(start)
 for s in range(10):
@@ -30,7 +29,6 @@ for l in set(list(pol)):
     counts[l]=pol.count(l)
 answer1=max(counts.values())-min(counts.values())
 
-
 pol=start
 pairs=defaultdict(int)
 for i in range(len(pol)-1):
@@ -44,7 +42,6 @@ for s in range(40):
         for i in inpairs[p]:
             newpairs[i]+=pairs[p]
     pairs=newpairs
-    print(pairs)
 
 counts=defaultdict(int)
 for p in pairs:
